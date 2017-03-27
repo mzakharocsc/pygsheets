@@ -11,6 +11,7 @@ Google SpreadSheet API.
 import re
 import warnings
 import os
+import time
 
 from .spreadsheet import Spreadsheet
 from .exceptions import (AuthenticationError, SpreadsheetNotFound,
@@ -376,11 +377,10 @@ class Client(object):
                 try:
                     response = request.execute()
                 except Exception as e:
-                    if str(e).find('timed out') == -1:
-                        raise
                     if i == self.retries-1:
-                        raise RequestError("Timeout")
-                    # print ("Cant connect, retrying ... " + str(i))
+                        raise
+                    print ("Cant connect, retrying ... " + str(i))
+                    time.sleep(1)
                 else:
                     return response
 
